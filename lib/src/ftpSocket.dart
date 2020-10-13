@@ -1,8 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:ftpconnect/src/debug/debugLog.dart';
-
+import 'debug/debugLog.dart';
 import '../ftpconnect.dart';
 
 class FTPSocket {

@@ -1,12 +1,11 @@
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:ftpconnect/ftpconnect.dart';
-import 'package:ftpconnect/src/dto/FTPEntry.dart';
-import 'package:ftpconnect/src/util/transferUtil.dart';
-
+import '../../ftpconnect.dart';
+import '../dto/FTPEntry.dart';
 import '../ftpExceptions.dart';
 import '../ftpSocket.dart';
+import '../util/transferUtil.dart';
 
 class FTPDirectory {
   final FTPSocket _socket;

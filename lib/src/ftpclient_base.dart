@@ -1,19 +1,19 @@
 import 'dart:io';
 
 import 'package:archive/archive_io.dart';
-import 'package:ftpconnect/src/commands/file.dart';
-import 'package:ftpconnect/src/commands/fileDownload.dart';
-import 'package:ftpconnect/src/commands/fileUpload.dart';
-import 'package:ftpconnect/src/debug/debugLog.dart';
-import 'package:ftpconnect/src/debug/noopLog.dart';
-import 'package:ftpconnect/src/debug/printLog.dart';
-import 'package:ftpconnect/src/util/transferUtil.dart';
 import 'package:path/path.dart';
 
 import 'commands/directory.dart';
+import 'commands/file.dart';
+import 'commands/fileDownload.dart';
+import 'commands/fileUpload.dart';
+import 'debug/debugLog.dart';
+import 'debug/noopLog.dart';
+import 'debug/printLog.dart';
 import 'dto/FTPEntry.dart';
 import 'ftpExceptions.dart';
 import 'ftpSocket.dart';
+import 'util/transferUtil.dart';
 
 class FTPConnect {
   final String _user;

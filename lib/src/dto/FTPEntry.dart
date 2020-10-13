@@ -1,4 +1,4 @@
-import 'package:ftpconnect/ftpconnect.dart';
+import '../../ftpconnect.dart';
 
 class FTPEntry {
   final String name;

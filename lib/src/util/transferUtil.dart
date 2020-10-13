@@ -1,7 +1,6 @@
 import 'dart:async';
 
-import 'package:ftpconnect/ftpconnect.dart';
-
+import '../../ftpconnect.dart';
 import '../ftpSocket.dart';
 
 class TransferUtil {
