@@ -7,6 +7,24 @@ import '../ftpExceptions.dart';
 import '../ftpSocket.dart';
 import '../util/transferUtil.dart';
 
+FTPEntry _buildMlsdEntry(String line) {
+  return FTPEntry(line);
+}
+
+SimpleFtpEntry _buildListEntry(String line) {
+  return SimpleFtpEntry.parse(line);
+}
+
+class ListCommand<T> {
+  static const MLSD = ListCommand._private('MLSD', _buildMlsdEntry);
+  static const LIST = ListCommand._private('LIST', _buildListEntry);
+
+  final String cmd;
+  final T Function(String line) entryBuilder;
+
+  const ListCommand._private(this.cmd, this.entryBuilder);
+}
+
 class FTPDirectory {
   final FTPSocket _socket;
 
@@ -42,7 +60,9 @@ class FTPDirectory {
     return sResponse.substring(iStart, iEnd);
   }
 
-  Future<List<FTPEntry>> listDirectoryContent() async {
+  Future<List<FTPEntry>> listDirectoryContent() => listContentWithCommand(ListCommand.MLSD);
+
+  Future<List<T>> listContentWithCommand<T>(ListCommand<T> command) async {
     // Transfer mode
     await TransferUtil.setTransferMode(_socket, TransferMode.ascii);
 
@@ -50,7 +70,7 @@ class FTPDirectory {
     String sResponse = await TransferUtil.enterPassiveMode(_socket);
 
     // Directoy content listing, the response will be handled by another socket
-    await _socket.sendCommand('MLSD', waitResponse: false);
+    await _socket.sendCommand(command.cmd, waitResponse: false);
 
     // Data transfer socket
     int iPort = TransferUtil.parsePort(sResponse);
@@ -68,11 +88,14 @@ class FTPDirectory {
     //Test if All data are well transferred
     await TransferUtil.checkTransferOK(_socket, sResponse);
 
-    // Convert MLSD response into FTPEntry
-    List<FTPEntry> lstFTPEntries = List<FTPEntry>();
+    // Convert response into FTPEntry
+    List<T> lstFTPEntries = List<T>();
     String.fromCharCodes(lstDirectoryListing).split('\n').forEach((line) {
       if (line.trim().isNotEmpty) {
-        lstFTPEntries.add(FTPEntry(line));
+        T entry = command.entryBuilder(line);
+        if (entry != null) {
+          lstFTPEntries.add(entry);
+        }
       }
     });
 
